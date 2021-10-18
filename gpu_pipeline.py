@@ -5,14 +5,14 @@
 
 # set up parameters
 
-# In[1]:
+# In[4]:
 
 
 logname = 'logfile_gpu'
 max_template_date = '2021-07-15'
 
 
-# In[7]:
+# In[5]:
 
 
 path_input = '/home/yyang18/pipeline/parallelfold/fasta/'
@@ -23,7 +23,7 @@ gpu_script = 'run_alphafold.sh'
 number = 4 # the number of sequence run in the same time (gpu part)
 
 
-# In[3]:
+# In[6]:
 
 
 import subprocess
@@ -33,13 +33,13 @@ import logging
 
 # setp2: run gpu part
 
-# In[4]:
+# In[7]:
 
 
 files = os.listdir(path_input)
 
 
-# In[10]:
+# In[8]:
 
 
 # divide files into chunks for sequences run in the same time
@@ -49,13 +49,13 @@ def divide_chunks(l, n):
 files_chunk = list(divide_chunks(files, number))
 
 
-# In[16]:
+# In[9]:
 
 
 # f is file_name
 # n is the index of the file
 def parallelfold_gpu(f,n):
-    script = './'+gpu_script+' '+                 '-d'+' '+path_data+' '+                 '-o'+' '+path_output+' '+                 '-m'+' '+'model_1,model_2,model_3,model_4,model_5'+' '+                 '-f'+' '+path_input+f+' '+                 '-t'+' '+max_template_date
+    script = './'+gpu_script+' '+                 '-d'+' '+path_data+' '+                 '-o'+' '+path_output+' '+                 '-m'+' '+'model_1,model_2,model_3,model_4,model_5'+' '+                 '-f'+' '+path_input+f+' '+                 '-t'+' '+max_template_date+' '+                 '-a'+' '+str(n)
     if n < number-1:
         subprocess.Popen(script,shell=True,cwd=path_script,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     else:
@@ -76,4 +76,10 @@ for files in files_chunk:
     for n,file in enumerate(files):
         parallelfold_gpu(file,n)
     logging.info((',').join(files)+" gpu part is done!")
+
+
+# In[ ]:
+
+
+
 
