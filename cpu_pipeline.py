@@ -74,10 +74,11 @@ logging.basicConfig(level=logging.DEBUG,
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 logger = logging.getLogger(__name__)
 logger.info("parallelfold cpu part start!")
-for file in files_chunk:
+for files in files_chunk:
     for n,file in enumerate(files):
         parallelfold_cpu(file,n)
-    logging.info((',').join(files)+" cpu part is done!")
+    for file in files:
+        logging.info(file+" cpu part is done!")
 
 
 # In[ ]:

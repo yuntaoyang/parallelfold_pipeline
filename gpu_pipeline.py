@@ -75,7 +75,8 @@ logger.info("parallelfold gpu part start!")
 for files in files_chunk:
     for n,file in enumerate(files):
         parallelfold_gpu(file,n)
-    logging.info((',').join(files)+" gpu part is done!")
+    for file in files:
+        logging.info(file+" cpu part is done!")
 
 
 # In[ ]:
