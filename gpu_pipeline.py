@@ -12,11 +12,12 @@ logname = 'logfile_gpu'
 max_template_date = '2021-07-15'
 
 
-# In[18]:
+# In[1]:
 
 
 path_input = '/home/yyang18/pipeline/parallelfold/fasta/'
 path_output = '/home/yyang18/pipeline/parallelfold/out/' # same output directory of cpu and gpu part
+path_gpu_log = '/home/yyang18/pipeline/parallelfold/gpu_log/'
 path_data = '/data/yyang18/alphafold/AlphaFold/'
 path_script = '/home/yyang18/software/ParallelFold/'
 gpu_script = 'run_alphafold.sh'
@@ -29,6 +30,14 @@ number = 2 # the number of sequence run in the same time (gpu part)
 import subprocess
 import os
 import logging
+
+
+# step1: create a directory for gpu log
+
+# In[ ]:
+
+
+os.mkdir(path_gpu_log)
 
 
 # setp2: run gpu part
@@ -55,11 +64,11 @@ files_chunk = list(divide_chunks(files, number))
 # f is file_name
 # n is the index of the file
 def parallelfold_gpu(f,n):
-    script = './'+gpu_script+' '+                 '-d'+' '+path_data+' '+                 '-o'+' '+path_output+' '+                 '-m'+' '+'model_1,model_2,model_3,model_4,model_5'+' '+                 '-f'+' '+path_input+f+' '+                 '-t'+' '+max_template_date+' '+                 '-a'+' '+str(n)
+    script = './'+gpu_script+' '+                 '-d'+' '+path_data+' '+                 '-o'+' '+path_output+' '+                 '-m'+' '+'model_1,model_2,model_3,model_4,model_5'+' '+                 '-f'+' '+path_input+f+' '+                 '-t'+' '+max_template_date+' '+                 '-a'+' '+str(n)+' '+                 '>'+' '+path_gpu_log+f.replace('.fasta','')+'_gpu.log'+' '+'2>&1'
     return script
 
 
-# In[25]:
+# In[ ]:
 
 
 logging.basicConfig(level=logging.DEBUG, 

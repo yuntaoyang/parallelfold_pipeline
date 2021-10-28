@@ -19,6 +19,7 @@ max_template_date = '2021-07-15'
 
 path_input = '/home/yyang18/pipeline/parallelfold/fasta/'
 path_output = '/home/yyang18/pipeline/parallelfold/out/' # same output directory of cpu and gpu part
+path_cpu_log = '/home/yyang18/pipeline/parallelfold/cpu_log/'
 path_data = '/data/yyang18/alphafold/AlphaFold/'
 path_script = '/home/yyang18/software/ParallelFold/'
 cpu_script = 'run_feature.sh'
@@ -33,7 +34,15 @@ import os
 import logging
 
 
-# setp1: run cpu part
+# step1: create a directory for cpu log
+
+# In[ ]:
+
+
+os.mkdir(path_cpu_log)
+
+
+# step2: run cpu part
 
 # In[4]:
 
@@ -57,7 +66,7 @@ files_chunk = list(divide_chunks(files, number))
 # f is file_name
 # n is the index of the file
 def parallelfold_cpu(f,n):
-    script = './'+cpu_script+' '+             '-d'+' '+path_data+' '+             '-o'+' '+path_output+' '+             '-m'+' '+'model_1'+' '+             '-f'+' '+path_input+f+' '+             '-t'+' '+max_template_date
+    script = './'+cpu_script+' '+             '-d'+' '+path_data+' '+             '-o'+' '+path_output+' '+             '-m'+' '+'model_1'+' '+             '-f'+' '+path_input+f+' '+             '-t'+' '+max_template_date+' '+             '>'+' '+path_cpu_log+f.replace('.fasta','')+'_cpu.log'+' '+'2>&1'
     return script
 
 
